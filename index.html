@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Marcador</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:#111;
+color:white;
+display:flex;
+flex-direction:column;
+height:100vh;
+}
+
+.team{
+flex:1;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+user-select:none;
+}
+
+.teamA{
+background:#1e88e5;
+}
+
+.teamB{
+background:#e53935;
+}
+
+.name{
+font-size:6vw;
+margin-bottom:10px;
+}
+
+.score{
+font-size:30vw;
+font-weight:bold;
+line-height:1;
+}
+
+.controls{
+height:60px;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+button{
+font-size:18px;
+padding:10px 20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="team teamA" id="teamA">
+<div class="name">Equipo A</div>
+<div class="score" id="scoreA">0</div>
+</div>
+
+<div class="team teamB" id="teamB">
+<div class="name">Equipo B</div>
+<div class="score" id="scoreB">0</div>
+</div>
+
+<div class="controls">
+<button onclick="resetScores()">Reiniciar</button>
+</div>
+
+<script>
+
+let scoreA = 0
+let scoreB = 0
+
+function update(){
+document.getElementById("scoreA").textContent = scoreA
+document.getElementById("scoreB").textContent = scoreB
+}
+
+function setupTeam(element, team){
+
+let startY = 0
+let touchUsed = false
+
+element.addEventListener("touchstart", e=>{
+touchUsed = true
+startY = e.touches[0].clientY
+})
+
+element.addEventListener("touchend", e=>{
+
+let endY = e.changedTouches[0].clientY
+let diff = endY - startY
+
+if(diff > 50){
+if(team==="A" && scoreA>0) scoreA--
+if(team==="B" && scoreB>0) scoreB--
+}else{
+if(team==="A") scoreA++
+if(team==="B") scoreB++
+}
+
+update()
+
+setTimeout(()=>{touchUsed=false},300)
+
+})
+
+element.addEventListener("click", ()=>{
+
+if(touchUsed) return
+
+if(team==="A") scoreA++
+if(team==="B") scoreB++
+
+update()
+
+})
+
+}
+
+setupTeam(document.getElementById("teamA"),"A")
+setupTeam(document.getElementById("teamB"),"B")
+
+function resetScores(){
+scoreA=0
+scoreB=0
+update()
+}
+
+</script>
+
+</body>
+</html>
